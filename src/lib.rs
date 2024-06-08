@@ -123,7 +123,7 @@ macro_rules! vtable {
 			)*
 		}
 	) => {
-		vtable!(
+		$crate::vtable!(
 			$(#[$vt_attr])*
 			$vt_vis $vt_name for $crate::VtObject<$vt_name> {
 				$(
