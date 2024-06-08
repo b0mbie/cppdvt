@@ -1,0 +1,9 @@
+[package]
+name = "cppdvt"
+version = "0.1.0"
+description = "C++ Declarative VTables"
+authors = ["[aka]bomb"]
+license = "MIT"
+edition = "2021"
+
+[dependencies]
