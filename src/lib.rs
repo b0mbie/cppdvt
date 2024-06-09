@@ -193,7 +193,7 @@ macro_rules! new_vtable_self {
 	};
 
 	(
-		$type:ident for $self:ty {
+		$type:ident for $self:ident {
 			$(
 				$(#[$set_attr:meta])*
 				$func_name:ident
