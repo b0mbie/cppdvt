@@ -172,8 +172,8 @@ macro_rules! virtual_call {
 /// Given `$type` is a VTable type and `Self` has all of the virtual methods for
 /// that VTable with the same name, create a new VTable with those methods.
 /// 
-/// Optionally, you can specify `for $self:ty`, where `$self` is the type to use
-/// instead of `Self`.
+/// Optionally, you can specify `for $self:ident`, where `$self` is the type to
+/// use instead of `Self`.
 #[macro_export]
 macro_rules! new_vtable_self {
 	(
