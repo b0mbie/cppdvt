@@ -3,6 +3,8 @@
 //! 
 //! This crate does not use any proc macros; all of the macros use `macro_rules!`.
 
+#![allow(clippy::tabs_in_doc_comments)]
+
 /// Macro to generate VTable structs with a domain-specific language.
 /// 
 /// Generated structs have `#[repr(C)]` applied to them, and functions defined
@@ -145,7 +147,7 @@ macro_rules! virtual_call_raw {
 			#[cfg(
 				all(windows, target_arch = "x86", not(feature = "abi_thiscall"))
 			)]
-			std::ptr::null_mut(),
+			core::ptr::null_mut(),
 			$($param,)*
 		)
 	};
