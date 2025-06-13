@@ -27,13 +27,13 @@
 /// // Assume that `Pet` is a class with a VTable that has the method
 /// // `Pet::speak()`, which returns nothing.
 /// 
-/// vtable!(
+/// vtable! {
 /// 	/// VTable for `Pet`.
 /// 	#[derive(Debug)]
 /// 	pub(crate) PetVt {
 /// 		pub fn speak();
 /// 	}
-/// );
+/// }
 /// ```
 /// 
 /// A VTable for a pre-defined type (for example, if there is inheritance) can
@@ -55,7 +55,7 @@
 /// 	Snake = 1,
 /// }
 /// 
-/// vtable!(
+/// vtable! {
 /// 	/// VTable for `Pet`.
 /// 	pub PetVt {
 /// 		#[doc = "Make the Pet call their callback for speaking."]
@@ -63,14 +63,14 @@
 /// 		pub fn kind() -> PetKind;
 /// 		pub fn name() -> *const c_char;
 /// 	}
-/// );
+/// }
 /// 
-/// vtable!(
+/// vtable! {
 /// 	/// VTable extension for `Lizard`, which extends from `PetVt`.
 /// 	LizardVtExt {
 /// 		pub fn derp();
 /// 	}
-/// );
+/// }
 /// 
 /// /// VTable for `Lizard`.
 /// #[repr(C)]
@@ -79,12 +79,12 @@
 /// 	lizard: LizardVtExt
 /// }
 /// 
-/// vtable!(
+/// vtable! {
 /// 	/// VTable extension for `Snake`, which extends from `PetVt`.
 /// 	SnakeVtExt {
 /// 		pub fn curl(outer_radius: u32);
 /// 	}
-/// );
+/// }
 /// 
 /// /// VTable for `Snake`.
 /// #[repr(C)]
@@ -95,7 +95,7 @@
 /// ```
 #[macro_export]
 macro_rules! vtable {
-	(
+	{
 		$(#[$vt_attr:meta])*
 		$vt_vis:vis $vt_name:ident for $vt_this:ty {
 			$(
@@ -103,7 +103,7 @@ macro_rules! vtable {
 				$fn_vis:vis fn $fn_name:ident($($fn_param:tt)*) $(-> $fn_ret:ty)?;
 			)*
 		}
-	) => {
+	} => {
 		$(#[$vt_attr])*
 		#[repr(C)]
 		$vt_vis struct $vt_name {
@@ -132,7 +132,7 @@ macro_rules! vtable {
 			)*
 		}
 	) => {
-		$crate::vtable!(
+		$crate::vtable! {
 			$(#[$vt_attr])*
 			$vt_vis $vt_name for $crate::VtObject<$vt_name> {
 				$(
@@ -140,7 +140,7 @@ macro_rules! vtable {
 					$fn_vis fn $fn_name($($fn_param)*) $(-> $fn_ret)?;
 				)*
 			}
-		);
+		}
 	};
 }
 
