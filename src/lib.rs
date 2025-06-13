@@ -1,4 +1,3 @@
-//! # C++ Declarative VTables
 //! Set of utilities for working with C++ virtual function tables.
 //! 
 //! This crate does not use any proc macros; all of the macros use `macro_rules!`.
@@ -8,7 +7,8 @@
 /// Macro to generate VTable structs with a domain-specific language.
 /// 
 /// Generated structs have `#[repr(C)]` applied to them, and functions defined
-/// within them are `extern "C"`.
+/// within them are `extern "C"` on non-Windows and `extern "thiscall"` on
+/// Windows targets.
 /// 
 /// VTables can be used with [`virtual_call!`] or [`virtual_call_raw!`].
 /// 
@@ -16,7 +16,7 @@
 /// VTable functions must be defined in order of their appearance in the header
 /// file of the class they are defined in.
 /// 
-/// Do keep in mind that on `cfg(not(target_os = "windows"))`, there are *two*
+/// Do keep in mind that on `cfg(not(windows))`, there are *two*
 /// virtual destructors.
 /// 
 /// # Examples
@@ -109,9 +109,16 @@ macro_rules! vtable {
 		$vt_vis struct $vt_name {
 			$(
 				$(#[$fn_attr])*
+				#[cfg(windows)]
+				$fn_vis $fn_name:
+					extern "thiscall" fn (
+						this: $vt_this, $($fn_param)*
+					) $(-> $fn_ret)?,
+				#[cfg(not(windows))]
 				$fn_vis $fn_name:
 					extern "C" fn (
-						this: $vt_this, $($fn_param)*) $(-> $fn_ret)?,
+						this: $vt_this, $($fn_param)*
+					) $(-> $fn_ret)?,
 			)*
 		}
 	};
@@ -144,10 +151,6 @@ macro_rules! virtual_call_raw {
 	($this:expr, $func:expr, $($param:expr),* $(,)?) => {
 		($func)(
 			$this,
-			#[cfg(
-				all(windows, target_arch = "x86", not(feature = "abi_thiscall"))
-			)]
-			core::ptr::null_mut(),
 			$($param,)*
 		)
 	};
