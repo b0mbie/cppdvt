@@ -1,7 +1,7 @@
 [package]
 name = "cppdvt"
-version = "0.1.0"
-description = "C++ Declarative VTables"
+version = "0.2.0"
+description = "Utilities for declaring and using C++ virtual function tables"
 authors = ["[aka]bomb"]
 license = "MIT"
 edition = "2021"
