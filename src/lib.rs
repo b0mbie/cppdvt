@@ -7,8 +7,8 @@
 /// Macro to generate VTable structs with a domain-specific language.
 /// 
 /// Generated structs have `#[repr(C)]` applied to them, and functions defined
-/// within them are `extern "C"` on non-Windows and `extern "thiscall"` on
-/// Windows targets.
+/// within them are `extern "C"` on non-Windows x86
+/// and `extern "thiscall"` on Windows x86 targets.
 /// 
 /// VTables can be used with [`virtual_call!`] or [`virtual_call_raw!`].
 /// 
@@ -109,12 +109,12 @@ macro_rules! vtable {
 		$vt_vis struct $vt_name {
 			$(
 				$(#[$fn_attr])*
-				#[cfg(windows)]
+				#[cfg(all(windows, target_arch = "x86"))]
 				$fn_vis $fn_name:
 					extern "thiscall" fn (
 						this: $vt_this, $($fn_param)*
 					) $(-> $fn_ret)?,
-				#[cfg(not(windows))]
+				#[cfg(not(all(windows, target_arch = "x86")))]
 				$fn_vis $fn_name:
 					extern "C" fn (
 						this: $vt_this, $($fn_param)*
