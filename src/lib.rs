@@ -7,8 +7,8 @@
 /// Macro to generate VTable structs with a domain-specific language.
 /// 
 /// Generated structs have `#[repr(C)]` applied to them, and functions defined
-/// within them are `extern "C"` on non-Windows x86
-/// and `extern "thiscall"` on Windows x86 targets.
+/// within them are `extern "C-unwind"` on non-Windows x86
+/// and `extern "thiscall-unwind"` on Windows x86 targets.
 /// 
 /// VTables can be used with [`virtual_call!`] or [`virtual_call_raw!`].
 /// 
