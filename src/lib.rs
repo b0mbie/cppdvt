@@ -111,12 +111,12 @@ macro_rules! vtable {
 				$(#[$fn_attr])*
 				#[cfg(all(windows, target_arch = "x86"))]
 				$fn_vis $fn_name:
-					unsafe extern "thiscall" fn (
+					unsafe extern "thiscall-unwind" fn (
 						this: $vt_this, $($fn_param)*
 					) $(-> $fn_ret)?,
 				#[cfg(not(all(windows, target_arch = "x86")))]
 				$fn_vis $fn_name:
-					unsafe extern "C" fn (
+					unsafe extern "C-unwind" fn (
 						this: $vt_this, $($fn_param)*
 					) $(-> $fn_ret)?,
 			)*
