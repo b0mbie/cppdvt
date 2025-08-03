@@ -128,7 +128,7 @@ macro_rules! vtable {
 	) => {
 		$crate::vtable! {
 			$(#[$vt_attr])*
-			$vt_vis $vt_name for $crate::VtObject<$vt_name> {
+			$vt_vis $vt_name for $crate::VtObjectPtr<$vt_name> {
 				$(
 					$(#[$fn_attr])*
 					$fn_vis fn $fn_name($($fn_param)*) $(-> $fn_ret)?;
