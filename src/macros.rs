@@ -4,7 +4,7 @@
 /// within them are `extern "C-unwind"` on non-Windows x86
 /// and `extern "thiscall-unwind"` on Windows x86 targets.
 /// 
-/// VTables can be used with [`virtual_call!`] or [`virtual_call_raw!`].
+/// VTables can be used with [`virtual_call!`].
 /// 
 /// # Function order
 /// VTable functions must be defined in order of their appearance in the header
@@ -188,4 +188,16 @@ macro_rules! this_to_self {
 	(ref $this:expr) => {
 		$this.cast::<Self>().as_ref()
 	};
+}
+
+/// Given an invokation of the form `vt_object => name(...)`,
+/// invoke the virtual method `name`
+/// of the [`VtObject`](crate::VtObject) `vt_object`
+/// with the specified arguments, if any.
+#[macro_export]
+macro_rules! virtual_call {
+	($vt_object:expr => $name:ident($($arg:tt)*)) => {{
+		let vt_object = &$vt_object;
+		($crate::VtObject::vtable(vt_object).$name)($crate::VtObject::as_ptr(vt_object), $($arg)*)
+	}};
 }
