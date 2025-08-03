@@ -5,7 +5,10 @@
 #![no_std]
 #![allow(clippy::tabs_in_doc_comments)]
 
-use ::core::ptr::NonNull;
+use ::core::{
+	fmt,
+	ptr::NonNull,
+};
 
 mod macros;
 
@@ -18,12 +21,19 @@ mod macros;
 pub type VtObjectPtr<VTable> = NonNull<NonNull<VTable>>;
 
 /// Structure that imitates the layout of a C++ object with a `VTable`.
-#[derive(Debug)]
 #[repr(C)]
 pub struct VtObject<VTable> {
 	/// Invariant: This field always contains a valid pointer to the `VTable` for a C++ class,
 	/// as specified by the Itanium ABI.
 	vtable: NonNull<VTable>,
+}
+
+impl<VTable> fmt::Debug for VtObject<VTable> {
+	fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+		f.debug_struct("VtObject")
+			.field("vtable", &self.vtable)
+			.finish()
+	}
 }
 
 impl<VTable> VtObject<VTable> {
