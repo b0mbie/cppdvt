@@ -18,6 +18,7 @@ mod macros;
 pub type VtObjectPtr<VTable> = NonNull<NonNull<VTable>>;
 
 /// Structure that imitates the layout of a C++ object with a `VTable`.
+#[derive(Debug)]
 #[repr(C)]
 pub struct VtObject<VTable> {
 	/// Invariant: This field always contains a valid pointer to the `VTable` for a C++ class,
