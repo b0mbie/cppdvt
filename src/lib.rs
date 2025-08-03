@@ -2,7 +2,10 @@
 //! 
 //! This crate does not use any proc macros; all of the macros use `macro_rules!`.
 
+#![no_std]
 #![allow(clippy::tabs_in_doc_comments)]
+
+use ::core::ptr::NonNull;
 
 /// Macro to generate VTable structs with a domain-specific language.
 /// 
@@ -229,6 +232,6 @@ macro_rules! this_to_self {
 /// Type alias for pointers to C++ objects of classes that have VTables.
 /// 
 /// # What the definition implies
-/// The current definition for this type alias implies that a C++ object with a
-/// VTable has a mutable pointer to the VTable as the first C field.
-pub type VtObject<VTable> = core::ptr::NonNull<*mut VTable>;
+/// The current definition for this type alias implies that a C++ object with a VTable
+/// has a non-null pointer to the VTable as the first field with `repr(C)`.
+pub type VtObject<VTable> = NonNull<NonNull<VTable>>;
