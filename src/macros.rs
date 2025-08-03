@@ -138,36 +138,6 @@ macro_rules! vtable {
 	};
 }
 
-/// Given `$this` is a pointer to an object that contains a VTable, call the
-/// method `$func` on it.
-#[macro_export]
-macro_rules! virtual_call_raw {
-	($this:expr, $func:expr, $($param:expr),* $(,)?) => {
-		($func)(
-			$this,
-			$($param,)*
-		)
-	};
-	($this:expr, $func:expr) => {
-		virtual_call_raw!($this, $func, )
-	};
-}
-
-/// Given `$this` is a `VtObject<VTable>`, call its virtual method
-/// `$name`.
-#[macro_export]
-macro_rules! virtual_call {
-	($this:expr, $name:ident, $($param:expr),* $(,)?) => {
-		$crate::virtual_call_raw!(
-			$this, ((&**($this.as_ref())).$name),
-			$($param),*
-		)
-	};
-	($this:expr, $name:ident) => {
-		$crate::virtual_call!($this, $name, )
-	};
-}
-
 /// Given `$type` is a VTable type and `Self` has all of the virtual methods for
 /// that VTable with the same name, create a new VTable with those methods.
 /// 
