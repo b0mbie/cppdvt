@@ -1,6 +1,6 @@
 [package]
 name = "cppdvt"
-version = "0.5.0"
+version = "0.5.1"
 description = "Utilities for declaring and using C++ virtual function tables"
 authors = ["[aka]bomb"]
 license = "MIT"
