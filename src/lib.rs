@@ -12,20 +12,23 @@ use ::core::{
 
 mod macros;
 
+/// Type for virtual function table pointers.
+pub type VTablePtr<VTable> = NonNull<VTable>;
+
 /// Type alias for pointers to C++ objects of classes that have virtual function tables,
 /// conforming to the Itanium ABI.
 /// 
 /// # What the definition implies
 /// The current definition for this type alias implies that a C++ object with a VTable
 /// has a non-null pointer to the VTable as the first field with `repr(C)`.
-pub type VtObjectPtr<VTable> = NonNull<NonNull<VTable>>;
+pub type VtObjectPtr<VTable> = NonNull<VTablePtr<VTable>>;
 
 /// Structure that imitates the layout of a C++ object with a `VTable`.
 #[repr(C)]
 pub struct VtObject<VTable> {
 	/// Invariant: This field always contains a valid pointer to the `VTable` for a C++ class,
 	/// as specified by the Itanium ABI.
-	vtable: NonNull<VTable>,
+	vtable: VTablePtr<VTable>,
 }
 
 impl<VTable> fmt::Debug for VtObject<VTable> {
@@ -64,7 +67,7 @@ impl<VTable> VtObject<VTable> {
 	}
 
 	/// Return a pointer to the object's `VTable`.
-	pub const fn vtable_ptr(&self) -> NonNull<VTable> {
+	pub const fn vtable_ptr(&self) -> VTablePtr<VTable> {
 		self.vtable
 	}
 
