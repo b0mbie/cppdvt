@@ -152,6 +152,7 @@ macro_rules! new_vtable_self {
 				$(#[$set_attr:meta])*
 				$func_name:ident
 			),*
+			$(,)?
 		}
 	) => {
 		$type {
