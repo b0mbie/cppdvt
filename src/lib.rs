@@ -31,6 +31,11 @@ pub struct VtObject<VTable> {
 	vtable: VTablePtr<VTable>,
 }
 
+// SAFETY: `vtable` is typically a pointer to static data.
+
+unsafe impl<VTable> Send for VtObject<VTable> {}
+unsafe impl<VTable> Sync for VtObject<VTable> {}
+
 impl<VTable> fmt::Debug for VtObject<VTable> {
 	fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
 		f.debug_struct("VtObject")
